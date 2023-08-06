@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 type Goal struct {
@@ -14,22 +12,22 @@ type Goal struct {
 	Relevance   float32 `json:"relevance"`
 }
 
-var goals []Goal
-
-func getItemsHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(goals)
-}
-
-func main() {
+func goalsHandler(c *gin.Context) {
+	var goals []Goal
 	goals = append(goals, Goal{ID: 1, Title: "Gym", Description: "descripce", Relevance: 3.5})
 	goals = append(goals, Goal{ID: 2, Title: "Uceni", Description: "descripce", Relevance: 4.5})
 	goals = append(goals, Goal{ID: 3, Title: "Beh", Description: "descripce", Relevance: 1.5})
 	goals = append(goals, Goal{ID: 4, Title: "Socializace", Description: "descripce", Relevance: 8.5})
 
-	http.HandleFunc("/api/goals", getItemsHandler)
+	c.JSON(200, gin.H{
+		"goals": goals,
+	})
+}
 
-	fmt.Println("Listen for api on http://localhost:8080/api/goals")
-	log.Fatal(http.ListenAndServe(":8080", nil))
-	fmt.Println("Server shutting down...")
+func main() {
+
+	r := gin.Default()
+	r.Use(cors.Default())
+	r.GET("/goals", goalsHandler)
+	r.Run(":5000")
 }
