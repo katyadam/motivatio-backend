@@ -5,9 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//Display
+/**
+Displaying all viable GET/POST requests
+*/
 func Display() {
 	r := gin.Default()
 	r.Use(cors.Default())
 	//	Start of api endpoints
-	r.Run(":8080")
+	displayRequests(r)
+	_ = r.Run(":8080")
 }

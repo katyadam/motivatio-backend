@@ -7,7 +7,11 @@ const (
 	Milestone TypeEnum = "You reach new milestone!"
 )
 
+// Notification
+/**
+	This datatype should match db table as well
+**/
 type Notification struct {
-	ID   int      `json:"id"`
-	Type TypeEnum `json:"type"`
+	ID               int      `json:"id"`
+	NotificationType TypeEnum `json:"type"`
 }

@@ -4,10 +4,14 @@ import (
 	"time"
 )
 
+// Goal
+/**
+	This datatype should match db table as well
+**/
 type Goal struct {
 	ID          int       `json:"id"`
 	Title       string    `json:"name"`
 	Description string    `json:"description"`
-	Date        time.Time `json:"date"`
-	Relevance   float32   `json:"relevance"`
+	StartDate   time.Time `json:"date"`
+	Relevancy   float32   `json:"relevance"`
 }

@@ -1,11 +1,15 @@
-package db_handler
+package dbHandler
 
 import (
 	"database/sql"
 	"log"
 )
 
-func getDb() *sql.DB {
+// GetDb
+/**
+Factory for db connection
+*/
+func GetDb() *sql.DB {
 	db, err := sql.Open(
 		"postgre",
 		"username:password@tcp(127.0.0.1:3306)/database_name",
