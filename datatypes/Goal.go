@@ -14,4 +14,6 @@ type Goal struct {
 	Description string    `json:"description"`
 	StartDate   time.Time `json:"date"`
 	Relevancy   float32   `json:"relevance"`
+	Pin         bool      `json:"pin"`
+	Done        bool      `json:"done"`
 }
