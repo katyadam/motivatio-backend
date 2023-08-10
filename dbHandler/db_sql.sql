@@ -3,70 +3,35 @@
 BEGIN;
 
 
-CREATE TABLE IF NOT EXISTS public."Goals"
+CREATE TABLE IF NOT EXISTS public."goals"
 (
-    "Id" serial NOT NULL,
-    "Title" character varying(50) NOT NULL,
-    "Description" character varying(250) NOT NULL,
+    "Id" integer NOT NULL DEFAULT nextval('"Goals_Id_seq"'::regclass),
+    "Title" character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    "Description" character varying(250) COLLATE pg_catalog."default" NOT NULL,
     "StartDate" date NOT NULL,
     "Relevancy" real NOT NULL,
-    PRIMARY KEY ("Id")
+    "Pin" boolean NOT NULL,
+    "Done" boolean NOT NULL,
+    CONSTRAINT "Goals_pkey" PRIMARY KEY ("Id")
     );
 
-CREATE TABLE IF NOT EXISTS public."Tags"
+CREATE TABLE IF NOT EXISTS public."goals_tags"
 (
-    "Id" serial NOT NULL,
-    "TagName" character varying(50) NOT NULL,
+    "Goals_Id" integer NOT NULL DEFAULT nextval('"Goals_Tags_Goals_Id_seq"'::regclass),
+    "Tags_Id" integer NOT NULL DEFAULT nextval('"Goals_Tags_Tags_Id_seq"'::regclass)
+    );
+
+CREATE TABLE IF NOT EXISTS public."tags"
+(
+    "Id" integer NOT NULL DEFAULT nextval('"Tags_Id_seq"'::regclass),
+    "TagName" character varying(50) COLLATE pg_catalog."default" NOT NULL,
     "Color" integer NOT NULL,
-    PRIMARY KEY ("Id")
+    CONSTRAINT "Tags_pkey" PRIMARY KEY ("Id")
     );
 
-CREATE TABLE IF NOT EXISTS public."Notifications"
-(
-    "Id" serial NOT NULL,
-    "NotificationType" character varying(50) NOT NULL,
-    PRIMARY KEY ("Id")
-    );
-
-CREATE TABLE IF NOT EXISTS public."Goals_Notifications"
-(
-    "Goals_Id" serial NOT NULL,
-    "Notifications_Id" serial NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS public."Goals_Tags"
-(
-    "Goals_Id" serial NOT NULL,
-    "Tags_Id" serial NOT NULL
-);
-
-ALTER TABLE IF EXISTS public."Goals_Notifications"
-    ADD FOREIGN KEY ("Goals_Id")
-    REFERENCES public."Goals" ("Id") MATCH SIMPLE
-    ON UPDATE NO ACTION
-       ON DELETE NO ACTION
-    NOT VALID;
-
-
-ALTER TABLE IF EXISTS public."Goals_Notifications"
-    ADD FOREIGN KEY ("Notifications_Id")
-    REFERENCES public."Notifications" ("Id") MATCH SIMPLE
-    ON UPDATE NO ACTION
-       ON DELETE NO ACTION
-    NOT VALID;
-
-
-ALTER TABLE IF EXISTS public."Goals_Tags"
-    ADD FOREIGN KEY ("Goals_Id")
-    REFERENCES public."Goals" ("Id") MATCH SIMPLE
-    ON UPDATE NO ACTION
-       ON DELETE NO ACTION
-    NOT VALID;
-
-
-ALTER TABLE IF EXISTS public."Goals_Tags"
-    ADD FOREIGN KEY ("Tags_Id")
-    REFERENCES public."Tags" ("Id") MATCH SIMPLE
+ALTER TABLE IF EXISTS public.goals_tags
+    ADD CONSTRAINT "Goals_Tags_Goals_Id_fkey" FOREIGN KEY ("Goals_Id")
+    REFERENCES public.goals (id) MATCH SIMPLE
     ON UPDATE NO ACTION
        ON DELETE NO ACTION
     NOT VALID;

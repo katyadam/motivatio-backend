@@ -5,14 +5,20 @@ Should store all GET/POST method handlers
 */
 
 import (
+	"database/sql"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"motivatio-backend/datatypes"
 	"motivatio-backend/dbHandler"
+	"strconv"
 	"time"
 )
 
+// importing database into package scope
+var Db *sql.DB = dbHandler.GetDb()
+
 func getGoals(c *gin.Context) {
-	rows, err := db.Query(dbHandler.SelectGoals)
+	rows, err := Db.Query(dbHandler.SelectGoals)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 	}
@@ -57,7 +63,7 @@ func addGoal(c *gin.Context) {
 		return
 	}
 	//	Perform db insertion
-	result, err := db.Exec(
+	result, err := Db.Exec(
 		dbHandler.InsertNewGoal,
 		goal.Title,
 		goal.Description,
@@ -72,7 +78,19 @@ func addGoal(c *gin.Context) {
 	}
 
 	lastInsertID, _ := result.LastInsertId()
-	goal.ID = int(lastInsertID)
+	goal.ID = strconv.FormatInt(lastInsertID, 10)
 
 	c.JSON(200, goal)
+}
+
+func deleteGoal(c *gin.Context) {
+	goalId := c.Param("id")
+	_, err := Db.Exec(dbHandler.DeleteGoal, goalId)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	successMsg := "Goal with ID %s deleted successfully"
+	c.JSON(200, gin.H{"status": fmt.Sprintf(successMsg, goalId)})
 }

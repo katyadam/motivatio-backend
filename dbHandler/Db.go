@@ -2,6 +2,7 @@ package dbHandler
 
 import (
 	"database/sql"
+	_ "github.com/lib/pq"
 	"log"
 )
 
@@ -11,15 +12,12 @@ Factory for db connection
 */
 func GetDb() *sql.DB {
 	db, err := sql.Open(
-		"postgre",
-		"username:password@tcp(127.0.0.1:3306)/database_name",
+		"postgres",
+		"user=postgres password=Motivatioo dbname=postgres host=127.0.0.1 port=5432 sslmode=disable",
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer func(db *sql.DB) {
-		_ = db.Close()
-	}(db)
 
 	return db
 }
