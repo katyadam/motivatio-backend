@@ -20,9 +20,9 @@ const DeleteGoal string = `
 `
 const InsertNewUser string = `
 	INSERT INTO users
-	(firstname, lastname, email, add_date)
+	(firstname, lastname, email, add_date, phone)
 	VALUES
-	($1, $2, $3, $4)
+	($1, $2, $3, $4, $5)
 `
 const DeleteUser string = `
 	DELETE FROM users WHERE id = $1

@@ -112,6 +112,7 @@ func addUser(c *gin.Context) {
 		user.Lastname,
 		user.Email,
 		user.AddDate,
+		user.Phone,
 	)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})

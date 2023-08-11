@@ -12,4 +12,5 @@ type User struct {
 	Lastname  string    `json:"lastname"`
 	Email     string    `json:"email"`
 	AddDate   time.Time `json:"addDate"`
+	Phone     string    `json:"phone"`
 }
