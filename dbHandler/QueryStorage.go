@@ -4,6 +4,7 @@ package dbHandler
 Storage of queries viable to execute into db
 */
 
+// GOALS
 const InsertNewGoal string = `
 	INSERT INTO goals
 	(title, description, start_date, relevancy, pin, done, user_id)
@@ -18,6 +19,8 @@ const SelectGoals string = `
 const DeleteGoal string = `
 	DELETE FROM goals WHERE id = $1
 `
+
+// USERS
 const InsertNewUser string = `
 	INSERT INTO users
 	(firstname, lastname, email, add_date, phone)
@@ -26,4 +29,35 @@ const InsertNewUser string = `
 `
 const DeleteUser string = `
 	DELETE FROM users WHERE id = $1
+`
+
+// TAGS
+const InsertNewTag string = `
+	INSERT INTO tags
+	(tag_name, color, user_id)
+	VALUES
+	($1, $2, $3)
+`
+const DeleteTag string = `
+	DELETE FROM tags WHERE id = $1
+`
+const GetUserTags string = `
+	SELECT * FROM tags where user_id = $1
+`
+
+// GOALS_TAGS
+const AssignTagToGoal string = `
+	INSERT INTO goals_tags
+	(goal_id, tag_id)
+	VALUES 
+	($1, $2)
+`
+const GetGoalTags string = `
+	SELECT * 
+	FROM tags
+	WHERE id in (
+		SELECT tag_id 
+		FROM goals_tags
+		WHERE goal_id = $1
+	)
 `

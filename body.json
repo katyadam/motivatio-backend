@@ -8,3 +8,19 @@
   "done": false,
   "userId": "5"
 }
+
+{
+  "id": "1",
+  "firstname": "Adam",
+  "lastname": "Kattan",
+  "email": "kattanadam@gmail.com",
+  "addDate": "2023-01-01T15:04:05Z",
+  "phone": "608884661"
+}
+
+{
+  "id": "0",
+  "name": "Gymec",
+  "color": 542542,
+  "userId": "6"
+}
