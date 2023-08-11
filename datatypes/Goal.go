@@ -14,4 +14,5 @@ type Goal struct {
 	Relevancy   float32   `json:"relevance"`
 	Pin         bool      `json:"pin"`
 	Done        bool      `json:"done"`
+	UserId      string    `json:"userId"`
 }

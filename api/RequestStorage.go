@@ -18,7 +18,8 @@ import (
 var Db *sql.DB = dbHandler.GetDb()
 
 func getGoals(c *gin.Context) {
-	rows, err := Db.Query(dbHandler.SelectGoals)
+	userId := c.Param("user_id")
+	rows, err := Db.Query(dbHandler.SelectGoals, userId)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 	}
@@ -34,8 +35,9 @@ func getGoals(c *gin.Context) {
 		var relevancy float32
 		var pinned bool
 		var done bool
+		var userId int
 
-		err := rows.Scan(&id, &title, &description, &startDate, &relevancy, &pinned, &done)
+		err := rows.Scan(&id, &title, &description, &startDate, &relevancy, &pinned, &done, &userId)
 		if err != nil {
 			c.JSON(500, gin.H{"error": err.Error()})
 			return
@@ -49,6 +51,7 @@ func getGoals(c *gin.Context) {
 			"relevancy":   relevancy,
 			"pin":         pinned,
 			"done":        done,
+			"userId":      userId,
 		}
 		goals = append(goals, goal)
 	}
@@ -70,7 +73,8 @@ func addGoal(c *gin.Context) {
 		goal.StartDate,
 		goal.Relevancy,
 		goal.Pin,
-		goal.Done)
+		goal.Done,
+		goal.UserId)
 
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
@@ -93,4 +97,41 @@ func deleteGoal(c *gin.Context) {
 
 	successMsg := "Goal with ID %s deleted successfully"
 	c.JSON(200, gin.H{"status": fmt.Sprintf(successMsg, goalId)})
+}
+
+func addUser(c *gin.Context) {
+	var user datatypes.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	//	Perform db insertion
+	result, err := Db.Exec(
+		dbHandler.InsertNewUser,
+		user.Firstname,
+		user.Lastname,
+		user.Email,
+		user.AddDate,
+	)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	lastInsertID, _ := result.LastInsertId()
+	user.ID = strconv.FormatInt(lastInsertID, 10)
+
+	c.JSON(200, user)
+}
+
+func deleteUser(c *gin.Context) {
+	userId := c.Param("id")
+	_, err := Db.Exec(dbHandler.DeleteUser, userId)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	successMsg := "User with ID %s deleted successfully"
+	c.JSON(200, gin.H{"status": fmt.Sprintf(successMsg, userId)})
 }
