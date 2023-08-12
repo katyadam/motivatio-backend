@@ -4,7 +4,7 @@ type TypeEnum string
 
 const (
 	Reminder  TypeEnum = "Reminder to take action!"
-	Milestone TypeEnum = "You reach new milestone!"
+	Milestone TypeEnum = "You reached new milestone!"
 )
 
 // Notification
