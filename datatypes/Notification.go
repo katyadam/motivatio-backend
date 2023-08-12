@@ -1,17 +1,17 @@
 package datatypes
 
-type TypeEnum string
+/*
+*
+Notification Enum type
+*/
+type NotificationType int
 
 const (
-	Reminder  TypeEnum = "Reminder to take action!"
-	Milestone TypeEnum = "You reached new milestone!"
+	Reminder NotificationType = iota
+	Milestone
 )
 
-// Notification
-/**
-	This datatype should match db table as well
-**/
 type Notification struct {
-	ID               int      `json:"id"`
-	NotificationType TypeEnum `json:"type"`
+	ID               int              `json:"id"`
+	NotificationType NotificationType `json:"type"`
 }

@@ -134,6 +134,7 @@ func insertNewTag(c *gin.Context) {
 
 	c.JSON(200, tag)
 }
+
 func deleteTag(c *gin.Context) {
 	id := c.Param("id")
 	_, err := Db.Exec(dbHandler.DeleteTag, id)
@@ -142,6 +143,7 @@ func deleteTag(c *gin.Context) {
 	successMsg := "Tag with ID %s successfully deleted!"
 	c.JSON(200, gin.H{"status": fmt.Sprintf(successMsg, id)})
 }
+
 func getUserTags(c *gin.Context) {
 	userId := c.Param("userId")
 	rows, err := Db.Query(dbHandler.GetUserTags, userId)
@@ -168,6 +170,7 @@ func getUserTags(c *gin.Context) {
 	}
 	c.JSON(200, tags)
 }
+
 func assignTagToGoal(c *gin.Context) {
 	goalId, tagId := c.Param("goalId"), c.Param("tagId")
 	_, err := Db.Exec(dbHandler.AssignTagToGoal, goalId, tagId)
@@ -176,6 +179,7 @@ func assignTagToGoal(c *gin.Context) {
 	successMsg := "TagId: %s assigned to GoalId: %s"
 	c.JSON(200, gin.H{"status": fmt.Sprintf(successMsg, tagId, goalId)})
 }
+
 func getGoalTags(c *gin.Context) {
 	goalId := c.Param("goalId")
 
