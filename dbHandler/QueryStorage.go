@@ -61,3 +61,32 @@ const GetGoalTags string = `
 		WHERE goal_id = $1
 	)
 `
+
+// UPDATE QUERIES
+
+// GOALS
+const EditGoal string = `
+	UPDATE goals
+	SET title = $2,
+	    description = $3
+	WHERE id = $1
+`
+const ChangePinGoal string = `
+	UPDATE goals
+	SET pin = $2
+	WHERE id = $1
+`
+const ChangeDoneGoal string = `
+	UPDATE goals
+	SET done = $2
+	WHERE id = $1
+`
+
+// TAGS
+
+const EditTag string = `
+	UPDATE tags
+	SET tag_name = $2,
+	    color = $3
+	WHERE id = $1
+`

@@ -18,7 +18,7 @@ import (
 var Db *sql.DB = dbHandler.GetDb()
 
 func getGoals(c *gin.Context) {
-	userId := c.Param("userId")
+	userId := c.Param("id")
 	rows, err := Db.Query(dbHandler.SelectGoals, userId)
 	handleError(err, 500, c)
 	defer rows.Close() // po ukonceni teto funkce se provede tato funkce, lepsi try with resources
@@ -145,7 +145,7 @@ func deleteTag(c *gin.Context) {
 }
 
 func getUserTags(c *gin.Context) {
-	userId := c.Param("userId")
+	userId := c.Param("id")
 	rows, err := Db.Query(dbHandler.GetUserTags, userId)
 	handleError(err, 500, c)
 
@@ -181,7 +181,7 @@ func assignTagToGoal(c *gin.Context) {
 }
 
 func getGoalTags(c *gin.Context) {
-	goalId := c.Param("goalId")
+	goalId := c.Param("id")
 
 	rows, err := Db.Query(dbHandler.GetGoalTags, goalId)
 	handleError(err, 500, c)
@@ -206,4 +206,44 @@ func getGoalTags(c *gin.Context) {
 		tags = append(tags, tag)
 	}
 	c.JSON(200, tags)
+}
+
+func editGoal(c *gin.Context) {
+	goalId, title, description := c.Param("id"), c.Param("title"), c.Param("description")
+
+	_, err := Db.Exec(dbHandler.EditGoal, goalId, title, description)
+	handleError(err, 500, c)
+
+	msg := fmt.Sprintf("GoalId: %s has been edited!", goalId)
+	c.JSON(200, msg)
+}
+
+func changePinGoal(c *gin.Context) {
+	goalId, pinState := c.Param("id"), c.Param("pinState")
+
+	_, err := Db.Exec(dbHandler.ChangePinGoal, goalId, pinState)
+	handleError(err, 500, c)
+
+	msg := fmt.Sprintf("GoalId's: %s state of being pinned change!", goalId)
+	c.JSON(200, msg)
+}
+
+func changeDoneGoal(c *gin.Context) {
+	goalId, isDone := c.Param("id"), c.Param("isDone")
+
+	_, err := Db.Exec(dbHandler.ChangeDoneGoal, goalId, isDone)
+	handleError(err, 500, c)
+
+	msg := fmt.Sprintf("GoalId's: %s state of being done changed!", goalId)
+	c.JSON(200, msg)
+}
+
+func editTag(c *gin.Context) {
+	tagId, tagName, color := c.Param("id"), c.Param("tagName"), c.Param("color")
+
+	_, err := Db.Exec(dbHandler.EditTag, tagId, tagName, color)
+	handleError(err, 500, c)
+
+	msg := fmt.Sprintf("TagId: %s has been edited", tagId)
+	c.JSON(200, msg)
 }
