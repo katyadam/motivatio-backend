@@ -26,14 +26,14 @@ func getGoals(c *gin.Context) {
 	var goals []map[string]interface{}
 
 	for rows.Next() {
-		var id int
+		var id string
 		var title string
 		var description string
 		var startDate time.Time
 		var relevancy float32
 		var pinned bool
 		var done bool
-		var userId int
+		var userId string
 
 		err := rows.Scan(&id, &title, &description, &startDate, &relevancy, &pinned, &done, &userId)
 		handleError(err, 500, c)
